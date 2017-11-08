@@ -4,6 +4,24 @@ const { Schema } = mongoose
 
 
 
+
+
+// const cardSchema = new Schema({
+//   symbol: { type: String, required: true },
+//   visible: { type: Boolean, default: false },
+//   won: { type: Boolean, default: false },
+// }, { usePushEach: true });
+
+const playerSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'users' },
+  points: { type: Number }
+}, { usePushEach: true });
+//
+// const playerSchema = new Schema({
+//   userId: { type: Schema.Types.ObjectId, ref: 'users' },
+//   pairs: [String],
+// }, { usePushEach: true });
+
 // const gameSchema = new Schema({
 //   players: [playerSchema],
 //   letterBoard: { type: String, required: true },
@@ -19,25 +37,7 @@ const { Schema } = mongoose
 //   draw: { type: Boolean, default: false },
 // }, { usePushEach: true });
 
-const cardSchema = new Schema({
-  symbol: { type: String, required: true },
-  visible: { type: Boolean, default: false },
-  won: { type: Boolean, default: false },
-}, { usePushEach: true });
-
-const playerSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: 'users' },
-  // name: { type: String, required: true},
-  points: { type: Number, default: 0 }
-}, { usePushEach: true });
-//
-// const playerSchema = new Schema({
-//   userId: { type: Schema.Types.ObjectId, ref: 'users' },
-//   pairs: [String],
-// }, { usePushEach: true });
-
 const gameSchema = new Schema({
-  cards: [cardSchema],
   players: [playerSchema],
   turn: { type: Number, default: 0 }, // player index
   started: { type: Boolean, default: false },
