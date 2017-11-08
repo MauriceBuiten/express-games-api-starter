@@ -16,7 +16,6 @@ const gameSchema = new Schema({
   completed: { type: Boolean },
   wheelValue: { type: Number },
   started: { type: Boolean, default: false },
-  winnerId: { type: Schema.Types.ObjectId, ref: 'users' },
   userId: { type: Schema.Types.ObjectId, ref: 'users' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
