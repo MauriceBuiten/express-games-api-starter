@@ -6,6 +6,15 @@ const utils = require('../lib/utils')
 
 const authenticate = passport.authorize('jwt', { session: false })
 
+function getWord() {
+  var words = ["refrigerator", "telephone", "pillowcase", "doormat", "houseplant", "gaming", "curtains"]
+  return words[Math.floor(Math.random() * words.length)];
+}
+
+function showLetterBoard(word) {
+  return word.split('').map(letter => '_').join(' ');
+}
+
 module.exports = io => {
   router
     .get('/games', (req, res, next) => {
@@ -28,13 +37,15 @@ module.exports = io => {
         .catch((error) => next(error))
     })
     .post('/games', authenticate, (req, res, next) => {
+      let initialWord = getWord()
       const newGame = {
         userId: req.account._id,
         players: [{
           userId: req.account._id,
           points: 0,
         }],
-        
+        word: initialWord,
+        letterBoard: showLetterBoard(initialWord)
       }
 
       Game.create(newGame)
