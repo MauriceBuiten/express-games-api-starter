@@ -11,7 +11,7 @@ const { Schema } = mongoose
 //   return word.split('').map(letter => '_').join(' ');
 // }
 
-const initialWord = getWord()
+// const initialWord = getWord()
 
 const playerSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'users' },
