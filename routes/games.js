@@ -32,8 +32,9 @@ module.exports = io => {
         userId: req.account._id,
         players: [{
           userId: req.account._id,
-          points: 0
-        }]
+          points: 0,
+        }],
+        
       }
 
       Game.create(newGame)
