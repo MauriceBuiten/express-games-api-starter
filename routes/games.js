@@ -75,12 +75,18 @@ module.exports = io => {
     .patch('/games/:id', authenticate, (req, res, next) => {
       const id = req.params.id
       const patchForGame = req.body
+      const letter = req.body.letter
 
       Game.findById(id)
         .then((game) => {
           if (!game) { return next() }
+           var newGuesses = [...game.guesses, letter]
 
-          const updatedGame = { ...game, ...patchForGame }
+           console.log("newGuesses: " + newGuesses) 
+           console.log("patch: " + patchForGame)
+
+          const updatedGame = { ...game,guesses:newGuesses, ...patchForGame }
+            // const updatedGame = { ...game, ...patchForGame }
 
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
@@ -94,6 +100,50 @@ module.exports = io => {
         })
         .catch((error) => next(error))
     })
+
+//
+//     .patch('/games/:id', authenticate, (req, res, next) => {
+//   const id = req.params.id
+//   const patchForGame = req.body
+//   const index = req.body.index
+//   const type = req.body.type
+//
+//   Game.findById(id)
+//     .then((game) => {
+//       if (!game) { return next() }
+//       var horizontal = [...game.horizontal]
+//       var vertical = [...game.vertical]
+//       var board = [...game.board]
+//
+//       console.log("index: " + index)
+//       console.log("type: " + type)
+//       console.log("patch: " + patchForGame)
+//       console.log("first " + horizontal)
+//
+//       if(type === "horizontal"){
+//         horizontal[index] = 1
+//         console.log(horizontal)
+//       }
+//
+//       if(type === "vertical"){
+//         vertical[index] = 1
+//       }
+//
+//       const updatedGame = { ...game, horizontal: horizontal, vertical: vertical }
+//       console.log(updatedGame)
+//
+//       Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
+//         .then((game) => {
+//           io.emit('action', {
+//             type: 'GAME_UPDATED',
+//             payload: game
+//           })
+//           res.json(game)
+//         })
+//         .catch((error) => next(error))
+//     })
+//     .catch((error) => next(error))
+// })
     .delete('/games/:id', authenticate, (req, res, next) => {
       const id = req.params.id
       Game.findByIdAndRemove(id)
