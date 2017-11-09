@@ -82,11 +82,10 @@ module.exports = io => {
           if (!game) { return next() }
            var newGuesses = [...game.guesses, letter]
 
-           console.log("newGuesses: " + newGuesses) 
-           console.log("patch: " + patchForGame)
-
-          const updatedGame = { ...game,guesses:newGuesses, ...patchForGame }
-            // const updatedGame = { ...game, ...patchForGame }
+          const updatedGame = {
+            ...game,
+            guesses:newGuesses,
+             ...patchForGame }
 
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
