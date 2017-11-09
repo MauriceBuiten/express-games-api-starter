@@ -2,6 +2,11 @@
 const mongoose = require('../config/database')
 const { Schema } = mongoose
 
+function getWord(){
+  var words = ["refrigerator", "telephone", "pillowcase", "doormat", "houseplant", "gaming", "curtains"]
+  return words[Math.floor(Math.random() * words.length)];
+}
+
 const playerSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'users' },
   points: { type: Number }
@@ -11,7 +16,7 @@ const gameSchema = new Schema({
   players: [playerSchema],
   turn: { type: Number, default: 0 },
   letterBoard: { type: String, default: '' },
-  word: { type: String, default: '' },
+  word: { type: String, default: getWord() },
   guesses: { type: Array },
   completed: { type: Boolean, default: false },
   wheelValue: { type: Number, default: 0 },
