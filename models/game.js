@@ -4,12 +4,14 @@ const { Schema } = mongoose
 
 const playerSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'users' },
-  points: { type: Number }
+   points: { type: Number }
 }, { usePushEach: true });
 
 const gameSchema = new Schema({
   players: [playerSchema],
   turn: { type: Number, default: 0 },
+  player_one_points:{ type: Number, default: 0 },
+  player_two_points:{ type: Number, default: 0 },
   word: { type: String, default: '' },
   letterBoard: { type: String, default: '' },
   guesses: { type: Array },
