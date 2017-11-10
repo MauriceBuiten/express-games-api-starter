@@ -7,21 +7,20 @@ const utils = require('../lib/utils')
 const authenticate = passport.authorize('jwt', { session: false })
 
 function getWord() {
-  var words = ["refrigerator", "telephone", "pillowcase", "doormat", "houseplant", "gaming", "curtains"]
+  const words = ["refrigerator", "telephone", "pillowcase", "doormat", "houseplant", "gaming", "curtains", "pandemonium", "requiem", "rhytmstick", "coffeecup", "teabag"]
   return words[Math.floor(Math.random() * words.length)];
 }
 
 function showLetterBoard(word, guesses) {
-  var splitWord = word.split('');
-  var result = [];
+  const splitWord = word.split('');
 
-  result = splitWord.map(letter => {
+  const result = splitWord.map(letter => {
     if (guesses.indexOf(letter) === -1) {
       return '_';
     } else return letter;
   });
 
-  let joined = result.join(' ');
+  const joined = result.join(' ');
   return joined;
 }
 
