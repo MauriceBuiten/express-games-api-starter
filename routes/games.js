@@ -11,8 +11,18 @@ function getWord() {
   return words[Math.floor(Math.random() * words.length)];
 }
 
-function showLetterBoard(word) {
-  return word.split('').map(letter => '_').join(' ');
+function showLetterBoard(word, guesses) {
+  var splitWord = word.split('');
+  var result = [];
+
+  result = splitWord.map(letter => {
+    if (guesses.indexOf(letter) === -1) {
+      return '_';
+    } else return letter;
+  });
+
+  let joined = result.join(' ');
+  return joined;
 }
 
 module.exports = io => {
@@ -80,10 +90,14 @@ module.exports = io => {
       Game.findById(id)
         .then((game) => {
           if (!game) { return next() }
-
+          console.log(game)
           const newGuesses = [...game.guesses, letter]
-          const updatedGame = { ...game, guesses: newGuesses, ...patchForGame }
-
+          const updatedGame = {
+            ...game,
+             guesses: newGuesses,
+             letterBoard: showLetterBoard(game.word, newGuesses),
+              ...patchForGame }
+          console.log(updatedGame)
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
               io.emit('action', {
