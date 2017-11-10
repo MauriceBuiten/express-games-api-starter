@@ -99,15 +99,19 @@ module.exports = io => {
         .then((game) => {
           if (!game) { return next() }
           const newGuesses = [...game.guesses, letter]
-          const curPlayer = game.players[game.turn]
-          let currentPoints = curPlayer.points
 
-          if (changeTurn(game.word, letter) === true) {
-            if (game.turn === 0) game.turn = 1
-            else game.turn = 0
-          }
-          else {
-            currentPoints += game.wheelValue
+          if(changeTurn(game.word, letter) === true) {
+            console.log("WRONG ANSWER!")
+            if(game.turn === 0) {
+              game.turn = 1
+
+            }else {
+               game.turn = 0
+             }
+          } else {
+            if(game.turn === 0) game.player_one_points++
+            else game.player_two_points++
+            console.log("RIGHT ANSWER")
           }
 
           const updatedGame = {
@@ -115,9 +119,10 @@ module.exports = io => {
              guesses: newGuesses,
              letterBoard: showLetterBoard(game.word, newGuesses),
              turn: game.turn,
-              ...patchForGame
+             player_one_points: game.player_one_points,
+             player_two_points: game.player_two_points,
+             ...patchForGame,
            }
-           updatedGame.players[game.turn].points = currentPoints
 
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
