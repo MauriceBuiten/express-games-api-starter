@@ -24,6 +24,25 @@ function showLetterBoard(word, guesses) {
   return joined;
 }
 
+function changeTurn(word, letter){
+  const splitWord = word.split('')
+  if(splitWord.indexOf(letter) === -1) {
+    return true
+  }
+  else return false
+}
+
+// function rightGuessCount(word, letter) {
+//     var splitWord = word.split('');
+//     var amountOfRightLetters = 0
+//     let guessedLetters = splitWord.filter(function(letterinword){
+//       return letterinword === letter
+//     })
+//     amountOfRightLetters = guessedLetters.length
+//     return amountOfRightLetters
+// }
+
+
 module.exports = io => {
   router
     .get('/games', (req, res, next) => {
@@ -89,14 +108,19 @@ module.exports = io => {
       Game.findById(id)
         .then((game) => {
           if (!game) { return next() }
-          console.log(game)
           const newGuesses = [...game.guesses, letter]
+
+          if(changeTurn(game.word, letter) === true) {
+                if(game.turn === 0) game.turn = 1
+                else game.turn = 0
+          } 
+
           const updatedGame = {
             ...game,
              guesses: newGuesses,
              letterBoard: showLetterBoard(game.word, newGuesses),
+             turn: game.turn,
               ...patchForGame }
-          console.log(updatedGame)
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
               io.emit('action', {
