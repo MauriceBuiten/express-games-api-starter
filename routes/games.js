@@ -55,7 +55,7 @@ module.exports = io => {
           points: 0,
         }],
         word: initialWord,
-        letterBoard: showLetterBoard(initialWord)
+        letterBoard: showLetterBoard(initialWord, [])
       }
 
       Game.create(newGame)
