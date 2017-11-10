@@ -14,7 +14,7 @@ const gameSchema = new Schema({
   letterBoard: { type: String, default: '' },
   guesses: { type: Array },
   completed: { type: Boolean, default: false },
-  wheelValue: { type: Number, default: 0 },
+  wheelValue: { type: Number, default: 10 },
   started: { type: Boolean, default: false },
   userId: { type: Schema.Types.ObjectId, ref: 'users' },
   createdAt: { type: Date, default: Date.now },

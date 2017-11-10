@@ -32,17 +32,6 @@ function changeTurn(word, letter){
   else return false
 }
 
-// function rightGuessCount(word, letter) {
-//     var splitWord = word.split('');
-//     var amountOfRightLetters = 0
-//     let guessedLetters = splitWord.filter(function(letterinword){
-//       return letterinword === letter
-//     })
-//     amountOfRightLetters = guessedLetters.length
-//     return amountOfRightLetters
-// }
-
-
 module.exports = io => {
   router
     .get('/games', (req, res, next) => {
@@ -105,22 +94,31 @@ module.exports = io => {
       const patchForGame = req.body
       const letter = req.body.key
 
+
       Game.findById(id)
         .then((game) => {
           if (!game) { return next() }
           const newGuesses = [...game.guesses, letter]
+          const curPlayer = game.players[game.turn]
+          let currentPoints = curPlayer.points
 
-          if(changeTurn(game.word, letter) === true) {
-                if(game.turn === 0) game.turn = 1
-                else game.turn = 0
-          } 
+          if (changeTurn(game.word, letter) === true) {
+            if (game.turn === 0) game.turn = 1
+            else game.turn = 0
+          }
+          else {
+            currentPoints += game.wheelValue
+          }
 
           const updatedGame = {
             ...game,
              guesses: newGuesses,
              letterBoard: showLetterBoard(game.word, newGuesses),
              turn: game.turn,
-              ...patchForGame }
+              ...patchForGame
+           }
+           updatedGame.players[game.turn].points = currentPoints
+
           Game.findByIdAndUpdate(id, { $set: updatedGame }, { new: true })
             .then((game) => {
               io.emit('action', {
